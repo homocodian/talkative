@@ -15,8 +15,8 @@ function IconButton({ Icon, showBadge, count, text, activeTab, onPress }) {
         />
       ) : (
         <Icon
-          className={`w-5 h-5 text-gray-400 group-hover:text-teal-600 ${
-            activeTab === text ? "text-teal-600" : ""
+          className={`w-5 h-5 group-hover:text-teal-600 ${
+            activeTab === text ? "text-teal-600" : "text-gray-400"
           }`}
         />
       )}
@@ -28,8 +28,8 @@ function BadgeIcon({ Icon, count, text, activeTab }) {
   return (
     <div className="relative">
       <Icon
-        className={`w-5 h-5 text-gray-400 group-hover:text-teal-600 ${
-          activeTab === text ? "text-teal-600" : ""
+        className={`w-5 h-5 group-hover:text-teal-600 ${
+          activeTab === text ? "text-teal-600" : "text-gray-400"
         }`}
       />
       <span className="absolute top-0 right-0 rounded-full p-1 bg-red-400 flex justify-center items-center">

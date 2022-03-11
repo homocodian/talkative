@@ -1,8 +1,8 @@
-function Spinner({ isLoading }) {
+function Spinner({ showLoader }) {
   return (
     <div className="w-full h-full flex justify-center items-center">
       <div>
-        {isLoading ? (
+        {showLoader ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

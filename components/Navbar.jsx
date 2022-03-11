@@ -16,20 +16,55 @@ import {
 import Image from "next/image";
 import IconButton from "../components/IconButton";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 function Navbar() {
   const activeTab = useSelector((state) => state.navReducer.activeTab);
   const dispatch = useDispatch();
+  const { route, push } = useRouter();
 
-  const handleTabButtonClick = (text) => {
+  const handlePageNavigation = (text) => {
     dispatch({
       type: "CHANGE_ACTIVE_TAB",
       payload: text,
     });
   };
 
+  const onPress = (text) => {
+    if (text === "home") {
+      push("/");
+      return;
+    }
+    push(text);
+  };
+
+  useEffect(() => {
+    switch (route) {
+      case "/meeting":
+        handlePageNavigation("meeting");
+        break;
+
+      case "/notification":
+        handlePageNavigation("notification");
+        break;
+
+      case "/chat":
+        handlePageNavigation("chat");
+        break;
+
+      case "/profile":
+        handlePageNavigation("profile");
+        break;
+
+      default:
+        handlePageNavigation("home");
+        break;
+    }
+  }, [route]);
+
   return (
-    <div className="w-16 sm:w-20 min-h-screen py-10 flex flex-col justify-between items-center border-r-[1.5px] border-gray-200">
+    <nav className="w-16 sm:w-20 min-h-screen py-10 flex flex-col justify-between items-center border-r-[1.5px] border-gray-200">
       <div>
         <LogoIcon className="h-7 w-7 text-orange-300" />
       </div>
@@ -37,33 +72,33 @@ function Navbar() {
         <IconButton
           text="home"
           activeTab={activeTab}
-          onPress={handleTabButtonClick}
+          onPress={onPress}
           Icon={activeTab !== "home" ? HomeIcon : HomeIconFilled}
         />
         <IconButton
           text="meeting"
           activeTab={activeTab}
-          onPress={handleTabButtonClick}
+          onPress={onPress}
           Icon={activeTab !== "meeting" ? VideoIcon : VideoIconFilled}
         />
         <IconButton
           showBadge
           text="notification"
           activeTab={activeTab}
-          onPress={handleTabButtonClick}
+          onPress={onPress}
           Icon={activeTab !== "notification" ? BellIcon : BellIconFilled}
         />
         <IconButton
           text="chat"
           activeTab={activeTab}
-          onPress={handleTabButtonClick}
+          onPress={onPress}
           Icon={activeTab !== "chat" ? ChatIcon : ChatIconFilled}
         />
         <IconButton
-          text="user"
+          text="profile"
           activeTab={activeTab}
-          onPress={handleTabButtonClick}
-          Icon={activeTab !== "user" ? UserIcon : UserIconFilled}
+          onPress={onPress}
+          Icon={activeTab !== "profile" ? UserIcon : UserIconFilled}
         />
       </div>
       <div>
@@ -78,7 +113,7 @@ function Navbar() {
           />
         </div>
       </div>
-    </div>
+    </nav>
   );
 }
 

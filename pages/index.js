@@ -1,36 +1,43 @@
+import { collection, query, where } from "firebase/firestore";
 import Head from "next/head";
-import { useState } from "react";
+import { useCollection } from "react-firebase-hooks/firestore";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import Record from "../components/Record";
 import Spinner from "../components/Spinner";
-import { records } from "../utils/records";
+import { db } from "../config/firebase";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [meetingRecords, loading, _] = useCollection(
+    query(collection(db, "meetings"), where("meetingClosed", "==", true))
+  );
   return (
     <div>
       <Head>
-        <title>Talktive | Home </title>
-        <meta name="description" content="Talktive" />
+        <title>Home</title>
+        <meta
+          name="description"
+          content="Talkative video conferencing and chat app"
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex">
         <Navbar />
         <main className="w-full">
           <Header />
-          <div style={{ height: `calc(100vh - 56px)` }}>
-            {isLoading || !records.length ? (
-              <Spinner isLoading={isLoading} />
+          <div style={{ height: `calc(100vh - 56px)`, overflowY: "auto" }}>
+            {loading || !meetingRecords?.docs?.length ? (
+              <Spinner showLoader={loading} />
             ) : (
-              <div className="flex flex-col justify-center items-center gap-4 w-full px-4 pt-12 py-2">
-                {records.map((record, index) => (
+              <div className="flex flex-col justify-center items-center gap-4 w-full px-4 pt-10 py-4">
+                {meetingRecords.docs.map((record) => (
                   <Record
-                    key={index}
-                    title={record.title}
-                    timestamp={record.timestamp}
-                    duration={record.duration}
+                    key={record.id}
+                    id={record.id}
+                    title={record.data().meetingTitle}
+                    timestamp={record.data().createdAt}
+                    duration={record.data().duration}
+                    totalPersons={record.data().persons.length}
                   />
                 ))}
               </div>
